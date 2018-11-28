@@ -20,31 +20,35 @@ public class Alphabetizer {
 		for(int i=0; i< numOfWords; i++) {
 			words.add(sc.nextLine());
 		}
-		// Remove non alphabetical characters from input
-		for(int i=0; i<words.size();i++){
-			words.set(i, words.get(i).replaceAll("[^a-zA-Z]", ""));
-			if(words.get(i).length() <= 0) {
-				return;
-			}
-			Character[] word = new Character[words.get(i).length()];
-			for(int j=0;j<words.get(i).length();j++) {
-				word[j] = words.get(i).charAt(j);
-			}
-			// Sorts each word ignoring case
-			Arrays.sort(word,new Comparator<Character>(){
-				@Override
-				public int compare(Character c1, Character c2) {
-					return Character.compare(Character.toLowerCase(c1),Character.toLowerCase(c2));
-				}
-				
-			});
+		// Remove non alphabetical characters from input and sort
+		System.out.println("Result after sorting..");
+		for(String word: words){
+			Character[] result = sortWords(word);
 			// print the sorted word
-			for(Character c:word) {
-				System.out.print(c);
-			}
+			Arrays.stream(result).forEach(System.out::print);
 			System.out.println("");
 		}
 		sc.close();
+	}
+
+	private static Character[] sortWords(String word) {
+		word = word.replaceAll("[^a-zA-Z]", "");
+		if(word.length() <= 0) {
+			return new Character[0];
+		}else if (word.length() == 1) {
+			return new Character[]{word.charAt(0)};
+		}
+		Character[] wordChar = 
+				word.chars().mapToObj(c -> (char)c).toArray(Character[]::new); 
+		// Sorts each word ignoring case
+		Arrays.sort(wordChar,new Comparator<Character>(){
+			@Override
+			public int compare(Character c1, Character c2) {
+				return Character.compare(Character.toLowerCase(c1),Character.toLowerCase(c2));
+			}
+			
+		});
+		return wordChar;
 	}
 
 }
